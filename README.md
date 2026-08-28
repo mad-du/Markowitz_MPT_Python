@@ -35,20 +35,4 @@ Choices of implementations :
 
 2. Without limitations on these weights, negative results may occur thus suggesting holding an asset in a shorting position (example for r = 0.0015, return of MSFT < 0). For very high budgets to work with, I'd imagine that this might not always be possible because of supply/demand price fluctuation in large volumes.
 
-## Structure
-
-├── data/                   # cached price data (gitignored)
-├── src/
-│   ├── returns.py          # price -> log return pipeline
-│   ├── covariance.py       # from-scratch sample covariance
-│   ├── optimizer.py        # Lagrangian solve, closed-form weights
-│   └── frontier.py         # efficient frontier sweep
-├── notebooks/
-│   └── analysis.ipynb      # end-to-end walkthrough with plots
-├── docs/
-│   └── derivation.md       # full mathematical derivation
-├── requirements.txt
-└── README.md
-
 ### Be sure to check out requirements.txt
-

@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{relsize}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bone}{\mathbf{1}}
+
+\title{Closed-Form Solution of Markowitz-Mean-Variance Optimization}
+\author{Puthi Uddam SEAN}
+\date{\today}
+
+\begin{document}
+
+\maketitle{}
+
+Suppose we have a portfolio ${p}$ consiting of ${2}$ assets ${A}$ and ${B}$, with respective weights ${w_A}$ and ${w_B}$.
+The Variance of the portfolio ${p}$ is given by:
+\begin{equation}
+    \Var(p) = \Var(w_A A + w_B B) = \Cov(w_A A + w_B B, w_A A + w_B B)
+\end{equation} 
+
+Thanks to the bilinearity of covariance, we can expand the above equation as follows :
+
+\begin{equation}
+    \begin{aligned}
+        \Var(p) &= w_A^2 \Var(A) + w_B^2 \Var(B) + 2 w_A w_B \Cov(A, B) \\ 
+        &= w_A^2 \sigma^2_A + w_B^2 \sigma^2_B + 2 w_A w_B \sigma_A \sigma_B \rho_{AB} \text{ , where } \rho_{AB} \text{ is the correlation coefficient.}
+    \end{aligned}
+\end{equation}
+
+Thanks to this equation, we can see that indeed 2 assets with negative correlation would reduce the variance and therefore, the volatility squared of our portfolio.
+
+Now, let's consider the case of ${n}$ assets, with respective weights ${\bw = (w_1, w_2, \ldots, w_n)}$ and returns ${r_1, r_2, \ldots, r_n}$. We thus have the return of the portfolio ${r_p = \sum_{i=1}^{n} w_i r_i}$. Treating ${r_i}$ as random variables, we can deduce the following:
+\begin{equation}
+    \Var(r_p) = \Cov(r_p, r_p) = \Cov\left(\sum_{i=1}^{n} w_i r_i, \sum_{j=1}^{n} w_j r_j\right) = \sum_{i=1}^{n} \sum_{j=1}^{n} w_i w_j \Cov(r_i, r_j)
+\end{equation}
+
+On the other hand, let $\bSigma$ be a covariance matrix of the returns of the assets, with $\Sigma_{ij} = \Cov(r_i, r_j)$. We therefore have $(\bSigma \bw)_i = \mathlarger{\sum_{j=1}^n \Sigma_{ij} w_j}$ and consequently 
+\begin{equation}
+\bw^\top \bSigma \bw = \sum_{i=1}^{n} w_i (\bSigma \bw)_i = \sum_{i=1}^{n} w_i \sum_{j=1}^{n} \Sigma_{ij} w_j = \sum_{i=1}^{n} \sum_{j=1}^{n} w_i w_j \Cov(r_i, r_j) = \Var(r_p)
+\end{equation}
+
+\end{document}
