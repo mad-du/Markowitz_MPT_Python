@@ -36,6 +36,8 @@ Thanks to the bilinearity of covariance, we can expand the above equation as fol
 
 Thanks to this equation, we can see that indeed 2 assets with negative correlation would reduce the variance and therefore, the volatility squared of our portfolio.
 
+\vspace{1em}
+
 Now, let's consider the case of ${n}$ assets, with respective weights ${\bw = (w_1, w_2, \ldots, w_n)}$ and returns ${r_1, r_2, \ldots, r_n}$. We thus have the return of the portfolio ${r_p = \sum_{i=1}^{n} w_i r_i}$. Treating ${r_i}$ as random variables, we can deduce the following:
 \begin{equation}
     \Var(r_p) = \Cov(r_p, r_p) = \Cov\left(\sum_{i=1}^{n} w_i r_i, \sum_{j=1}^{n} w_j r_j\right) = \sum_{i=1}^{n} \sum_{j=1}^{n} w_i w_j \Cov(r_i, r_j)
@@ -45,5 +47,69 @@ On the other hand, let $\bSigma$ be a covariance matrix of the returns of the as
 \begin{equation}
 \bw^\top \bSigma \bw = \sum_{i=1}^{n} w_i (\bSigma \bw)_i = \sum_{i=1}^{n} w_i \sum_{j=1}^{n} \Sigma_{ij} w_j = \sum_{i=1}^{n} \sum_{j=1}^{n} w_i w_j \Cov(r_i, r_j) = \Var(r_p)
 \end{equation}
+
+We can infer directly that reducing the variance of the portfolio, and therefore its volatily, is equivalent to minimizing the quadraitc form $\bw^\top \bSigma \bw$ with respect to the weights $\bw$.
+Assuming we are working with a budget of 1 with a target return of $r_p$, we can formulate the following optimisation problem:
+\begin{equation}
+    \begin{aligned}
+        \min_{\bw} \quad & \bw^\top \bSigma \bw \\
+        \text{s.t.} \quad & \bw^\top \bmu = r_p \\
+        & \bw^\top \bone = 1
+    \end{aligned}
+\end{equation}
+
+We solve this optimization problem via Lagrange multipliers, thus, introducing one multiplier per constraint, our Lagrangian is given by:
+
+\begin{equation}
+    \begin{aligned}
+        &\mathcal{L}(\bw, \lambda, \gamma) = \frac{1}{2} \bw^\top \bSigma \bw - \lambda (\bw^\top \bmu - r_p) - \gamma (\bw^\top \bone - 1)\\
+        \Rightarrow & \frac{\partial \mathcal{L}}{\partial \bw} = \bSigma \bw - \lambda \bmu - \gamma \bone \\
+    \end{aligned}
+\end{equation}
+
+Setting this partial derivative to zero, we obtain $\bw$ as follows:
+\begin{equation}
+    \bw =\bSigma^{-1} (\lambda \bmu + \gamma \bone)
+\end{equation}
+
+Plugging this value of $\bw$ into the constraints, we obtain the following system of equations:
+
+\begin{align}
+    \lambda\,\underbrace{\boldsymbol{\mu}^T\Sigma^{-1}\boldsymbol{\mu}}_{A} + \gamma\,\underbrace{\boldsymbol{\mu}^T\Sigma^{-1}\mathbf{1}}_{B} &= \bar r \\
+    \lambda\,\underbrace{\mathbf{1}^T\Sigma^{-1}\boldsymbol{\mu}}_{B} + \gamma\,\underbrace{\mathbf{1}^T\Sigma^{-1}\mathbf{1}}_{C} &= 1
+\end{align}
+which can be written as the linear system
+\begin{equation}
+    \begin{pmatrix} A & B \\ B & C \end{pmatrix}
+    \begin{pmatrix} \lambda \\ \gamma \end{pmatrix}
+    =
+    \begin{pmatrix} \bar r \\ 1 \end{pmatrix}
+\end{equation}
+
+Denoting $M = \begin{pmatrix} A & B \\ B & C \end{pmatrix}$, we have
+
+\begin{equation}
+    \begin{aligned}
+        &\begin{pmatrix} \lambda \\ \gamma \end{pmatrix} = M^{-1}\begin{pmatrix} \bar r \\ 1 \end{pmatrix} \\
+        \Rightarrow & \begin{pmatrix} \lambda \\ \gamma \end{pmatrix} = \frac{1}{AC - B^2}\begin{pmatrix} C & -B \\ -B & A \end{pmatrix}\begin{pmatrix} \bar r \\ 1 \end{pmatrix} = \frac{1}{AC - B^2}\begin{pmatrix} C\bar r - B \\ A - B\bar r \end{pmatrix} \\
+        \Rightarrow & \begin{cases} \lambda(\bar r) = \frac{C\bar r - B}{AC - B^2} \\ \gamma(\bar r) = \frac{A - B\bar r}{AC - B^2} \end{cases}
+    \end{aligned}
+\end{equation}
+
+\vspace{1em}
+
+Given $\lambda(\bar r)$ and $\gamma(\bar r)$ from equation (11), the optimal weights follow directly by substituting back into equation (7):
+
+\begin{equation}
+    \begin{aligned}
+        & \mathbf{w}(\bar r) = \Sigma^{-1}\big(\lambda(\bar r)\,\boldsymbol{\mu} + \gamma(\bar r)\,\mathbf{1}\big) \\
+        \Rightarrow & \mathbf{w}(\bar r) = \frac{1}{AC - B^2}\Sigma^{-1}\big((C\bar r - B)\,\boldsymbol{\mu} + (A - B\bar r)\,\mathbf{1}\big)
+    \end{aligned}
+\end{equation}
+
+In our implementation, we solved this system of equations using the \texttt{numpy.linalg.solve} function, allowing for a more numerically stable computation compared to explicitly inverting the matrix.
+\vspace{2em}
+In order to trace the curve of the efficient frontier, we simply sweep the target return $\bar r$ from the minimum to the maximum expected return of the assets, and compute the corresponding optimal weights $\bw(\bar r)$ and the associated portfolio variance $\Var(r_p) = \bw(\bar r)^\top \bSigma \bw(\bar r)$.
+
 
 \end{document}

@@ -1,3 +1,5 @@
+from numpy._core.defchararray import index
+
 import yfinance as yf # type: ignore
 import numpy as np
 import pandas as pd
@@ -108,3 +110,12 @@ plt.xlabel('Standard Deviation')
 plt.ylabel('Expected Return')
 plt.title('Efficient Frontier')
 plt.show()
+
+irx = yf.download('^IRX', start='2022-08-25', end='2026-08-24')['Close']
+r_f = np.mean((1+ irx/100)**(1/252) - 1)
+
+Sharpe_ratios = (r_values - r_f) / portfolio_standard_deviations_list
+print('Sharpe Ratios: ')
+print(Sharpe_ratios)
+
+print(portfolio_weights_list[np.argmax(Sharpe_ratios)])

@@ -4,7 +4,7 @@ An implementation of Harry Markowitz's Modern Portfolio Theory's mean-variance o
 
 ## Why Mean-Variance Optimization
 
-Just about any YouTube video or Article about MPT will tell you within the first 5 seconds that it changed the field forever, that it was a rupture in investment portfolio management. What a lot of these ressources fail to highlight however is how satisfying the financial and mathematical intuitions and reasonings behind this theory is, and that is precisely what motivated to dive deeper into this affair.
+Just about any YouTube video or Article about MPT will tell you within the first 5 seconds that it changed the field forever, that it was a rupture in investment portfolio management. What a lot of these ressources fail to highlight however is how satisfying the financial and mathematical intuitions and reasonings behind this theory is, and that is precisely what motivated me to dive deeper into this affair.
 
 What these ressources definitely succeed in highlighting is that the actual math behind it, much like anything else in the field of mathematics that makes it so interesting, is how daunting and confusing it can get (or perhaps it's because I haven't been in school for long enough...)
 
@@ -16,11 +16,11 @@ That said, this project has allowed me to further develop not just my mathematic
 
 2. Deriving the closed-form solutions of Markowitz' problem via Lagrangian optimization - I was able to put to application the sometimes abstract rules of the game that is Linear Algebra, all while developing a newfound appreciation for this powerful tool (Lagrange multipliers), and not to mention explore the way a library like numpy handles its different function and why one solution not only is cleaner but also more optimized computationally.
 
-3. The efficient frontier - other than the satisfaction from seeing a pyplot graph display on my screen with this curve that I've been chasing after for the past few days, building it, researching it and pondering on it allowed me to more deeply understand this curve, especially what it can say about a person. What makes MPT so interesting, and this applies to all of trading, is that no matter how concrete and grounded the mathematical theory behind it is, there is truly no 'correct' portfolio to choose from amongst the infinite amounts of portfolios above the suboptimal line. Markowitz's work revolutionzed the world of trading but in a way, it simply shrunk and moved a trader's playground, grounding it more on reason.
+3. The efficient frontier - other than the satisfaction from seeing a pyplot graph display on my screen with this curve that I've been chasing after for the past few days, building it, researching it and pondering on it allowed me to more deeply understand this curve, especially what it can say about a person. What makes MPT so interesting, and this applies to all of trading, is that no matter how concrete and grounded the mathematical theory behind it is, there is truly no 'correct' portfolio to choose from amongst the infinite amounts of portfolios above the suboptimal line. Markowitz's work revolutionized the world of trading but in a way, it simply shrunk and moved a trader's playground, grounding it more on reason.
 
 ## Methodology
 
-You can find the full derivation, from the equation for the standard deviation squared of a portfolio to the Lagrangian multipliers and its closed-form solution in : 
+You can find the full derivation, from the equation for the standard deviation squared of a portfolio to the Lagrangian multipliers and its closed-form solution in : derivation.pdf
 
 Choices of implementations : 
 1. np.linalg.solve instead of np.linalg.inv - this allows us to avoid the numerical instability due to the increased number of floating point operations in explicitly inversing a matrix (especially as it gets larger and larger).
